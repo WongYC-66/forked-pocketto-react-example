@@ -6,10 +6,12 @@ import { DatabaseManager, p } from 'pocketto'
 
 p.setEnvironment('browser');
 DatabaseManager.connect('default', {
-  dbName: 'default',
+    dbName: 'default',
 }).then(() => {
+    p.setRealtime(true);
     createRoot(document.getElementById('root')!).render(
-      <StrictMode>
-    <App />
-  </StrictMode>,
-)});
+        <StrictMode>
+            <App />
+        </StrictMode>,
+    )
+});
