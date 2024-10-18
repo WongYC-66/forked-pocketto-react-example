@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { DatabaseManager, p, syncDatabases } from 'pocketto'
+import { DatabaseManager, p } from 'pocketto'
 
 p.setEnvironment('browser');
 DatabaseManager.connect('default', {

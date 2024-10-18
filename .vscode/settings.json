@@ -15,11 +15,6 @@
         "overrideConfigFile": ".eslintrc.json"
     },
     "cSpell.words": [
-        "pocketto", // Framework
-        "Pressable",
-        "DDTHH", // For date format
-        "Nativewind",
-        "walkthroughable",
-        "collapsable",
+        "pocketto",
     ]
 }

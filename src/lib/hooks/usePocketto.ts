@@ -5,23 +5,26 @@ import { useEffect, useState } from "react";
 export function useRealtimeValue<T extends BaseModel>(value: T, onChange?: (value: T) => void) {
     const [data, setData] = useState<T>(value);
 
+    const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {
         onDocChange(async (id) => {
             if (id !== data.id) return;
             const doc = await data.getClass().query().find(id) as T;
-            onChange?.(doc as T);
-            setData(doc as T);
+            setChangedDoc(doc);
         });
+    }, []);
 
-        return () => {
-        };
-
-    }, [data]);
+    useEffect(() => {
+        if (changedDoc) {
+            setData(changedDoc);
+            onChange?.(changedDoc);
+        }
+    }, [changedDoc]);
 
     return data;
 }
 
-export function useRealtimeArray<T extends BaseModel>(type: ModelStatic<T>, config: {
+export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, config: {
     value?: Array<T>;
     onChange?: (value: Array<T>) => void;
     order?: "asc" | "desc";
@@ -34,7 +37,7 @@ export function useRealtimeArray<T extends BaseModel>(type: ModelStatic<T>, conf
         order,
         disableAutoAppend,
     } = config;
-    const [data, setData] = useState<T[]>(value || []);
+    const [data, setData] = useState<Array<T>>(value || []);
 
     useEffect(() => {
         if (value) {
@@ -60,11 +63,11 @@ export function useRealtimeArray<T extends BaseModel>(type: ModelStatic<T>, conf
                 const sameIdIndex = newData.findIndex((d) => d.id === changedDoc.id);
                 if (sameIdIndex !== -1) {
                     newData[sameIdIndex] = changedDoc;
-                } else {
-                    if (!order || order === "asc") {
-                        newData.push(changedDoc as T);
-                    } else if (order === "desc") {
+                } else if (!disableAutoAppend) {
+                    if (!order || order === "desc") {
                         newData.unshift(changedDoc as T);
+                    } else if (order === "asc") {
+                        newData.push(changedDoc as T);
                     }
                 }
                 onChange?.(newData);

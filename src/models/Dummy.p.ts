@@ -1,15 +1,19 @@
-import { Model, Pocketto } from "pocketto";
+import { Model } from "pocketto";
 import moment from 'moment';
 
-@Pocketto
 export class Dummy extends Model {
     static collectionName = 'Dummies';
 
     name?: string;
-    someData?: any;
+    color?: string;
 
     setRandomName() {
         this.name = moment().format('YYYY-MM-DD HH:mm:ss');
+        return this;
+    }
+
+    setRandomHexColor() {
+        this.color = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
         return this;
     }
 }

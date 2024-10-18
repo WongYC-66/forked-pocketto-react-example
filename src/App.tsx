@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { useRealtimeArray, useRealtimeValue } from './lib/hooks/usePocketto';
+import { useRealtimeList, useRealtimeValue } from './lib/hooks/usePocketto';
 import { Dummy } from './models/Dummy.p';
 
 function App() {
     const [count, setCount] = useState(0);
     const dummy = useRealtimeValue(new Dummy());
     const [dList, setDList] = useState<Dummy[]>([]);
-    const dummyList = useRealtimeArray(Dummy, { order: 'desc', value: dList });
+    const dummyList = useRealtimeList(Dummy, { order: 'desc', value: dList });
 
     useEffect(() => {
         Dummy
@@ -39,6 +39,7 @@ function App() {
 
                     const dummyItem = new Dummy();
                     dummyItem.setRandomName();
+                    dummyItem.setRandomHexColor();
                     await dummyItem.save();
                 }}>
                     count is {count}
@@ -51,7 +52,9 @@ function App() {
             <div className=''>
                 {
                     dummyList.map((dummy, index) => {
-                        return <p key={index} className='text-bold'>{dummy.name}</p>;
+                        return <p key={index} className='text-bold' style={{
+                            color: dummy.color,
+                        }}>{dummy.name}</p>;
                     })
                 }
             </div>
