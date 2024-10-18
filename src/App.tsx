@@ -8,8 +8,16 @@ import { Dummy } from './models/Dummy.p';
 function App() {
     const [count, setCount] = useState(0);
     const dummy = useRealtimeValue(new Dummy());
-    const dummyList = useRealtimeArray(Dummy, { order: 'asc' });
-    console.log('dummyList: ', dummyList);
+    const [dList, setDList] = useState<Dummy[]>([]);
+    const dummyList = useRealtimeArray(Dummy, { order: 'desc', value: dList });
+
+    useEffect(() => {
+        Dummy
+            .query()
+            .orderBy('createdAt', 'desc')
+            .get()
+            .then(result => setDList(result));
+    }, []);
 
     return (
         <>
