@@ -7,11 +7,15 @@ export function useRealtimeValue<T extends BaseModel>(value: T, onChange?: (valu
 
     const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {
-        onDocChange(async (id) => {
+        const docChange = async (id: string) => {
             if (id !== data.id) return;
             const doc = await data.getClass().query().find(id) as T;
             setChangedDoc(doc);
-        });
+        }
+        const event = onDocChange(docChange);
+        return () => {
+            event.off('docChange', docChange);
+        }
     }, []);
 
     useEffect(() => {
@@ -47,13 +51,17 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
 
     const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {
-        onDocChange(async (id) => {
+        const docChange = async (id: string) => {
             if (!(data instanceof Array)) return;
             const doc = await new type().getClass().query().find(id) as T;
             const sameModelType = new type().cName === doc.cName;
             if (!sameModelType) return;
             setChangedDoc(doc);
-        });
+        };
+        const event = onDocChange(docChange);
+        return () => {
+            event.off('docChange', docChange);
+        };
     }, []);
 
     useEffect(() => {
