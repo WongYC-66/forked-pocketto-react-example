@@ -42,38 +42,36 @@ export function useRealtimeArray<T extends BaseModel>(type: ModelStatic<T>, conf
         }
     }, [value]);
 
+    const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {
         onDocChange(async (id) => {
             if (!(data instanceof Array)) return;
             const doc = await new type().getClass().query().find(id) as T;
             const sameModelType = new type().cName === doc.cName;
             if (!sameModelType) return;
-
-            const index = data.findIndex(v => v.id === id);
-            const dataFound = index !== -1;
-            if (dataFound) {
-                const newData = [...data];
-                newData[index] = doc as T;
-                onChange?.(newData);
-                setData(newData);
-                return;
-            }
-
-            if (disableAutoAppend) return;
-            if (dataFound) return;
-            const newData = [...data];
-            if (!order || order === "asc") {
-                newData.push(doc as T);
-            } else if (order === "desc") {
-                newData.unshift(doc as T);
-            }
-            onChange?.(newData);
-            setData(newData);
+            setChangedDoc(doc);
         });
+    }, []);
 
-        return () => {
-        };
-    }, [data]);
+    useEffect(() => {
+        if (changedDoc) {
+            setData((prev) => {
+                const newData = [...prev];
+                const sameIdIndex = newData.findIndex((d) => d.id === changedDoc.id);
+                if (sameIdIndex !== -1) {
+                    newData[sameIdIndex] = changedDoc;
+                } else {
+                    if (!order || order === "asc") {
+                        newData.push(changedDoc as T);
+                    } else if (order === "desc") {
+                        newData.unshift(changedDoc as T);
+                    }
+                }
+                onChange?.(newData);
+                return newData;
+            });
+        }
+    }, [changedDoc])
 
     return data;
 }
