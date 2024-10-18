@@ -2,6 +2,7 @@ import { Model } from "pocketto";
 import moment from 'moment';
 
 export class Dummy extends Model {
+    static dbName = 'default';
     static collectionName = 'Dummies';
 
     name?: string;

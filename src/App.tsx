@@ -21,7 +21,7 @@ function App() {
 
     return (
         <>
-            <div>
+            <div className='flex flex-row w-full justify-center'>
                 <a href="https://vitejs.dev" target="_blank">
                     <img src={viteLogo} className="logo" alt="Vite logo" />
                 </a>
@@ -30,25 +30,21 @@ function App() {
                 </a>
             </div>
             <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={async () => {
+            <div>
+                <button className='my-4 bg-gray-200 text-black active:scale-95' onClick={async () => {
                     setCount((count) => count + 1);
-
-                    // dummy.setRandomName();
-                    // await dummy.save();
-
                     const dummyItem = new Dummy();
                     dummyItem.setRandomName();
                     dummyItem.setRandomHexColor();
                     await dummyItem.save();
                 }}>
-                    count is {count}
+                    Click to add Dummy
                 </button>
             </div>
             <p className="read-the-docs">
                 Click on the Vite and React logos to learn more
             </p>
-            <div className='text-blue-800'>New Name: {dummy.name}</div>
+            {/* <div className='text-blue-800'>New Name: {dummy.name}</div> */}
             <div className=''>
                 {
                     dummyList.map((dummy, index) => {
