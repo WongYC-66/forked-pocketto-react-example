@@ -79,7 +79,8 @@ button:focus-visible {
 
 .table-container {
     position: relative;
-    width: 1000px;
+    max-width: 1000px;
+    min-width: 100%;
 }
 
 .table-container thead {
