@@ -1,6 +1,9 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { Link, Route, Switch } from 'wouter'
+import { DemoRealTimeListPage } from './pages/DemoRealTimeListPage'
+import { DemoRealTimePage } from './pages/DemoRealTimePage'
 
 function App() {
     return (
@@ -20,6 +23,19 @@ function App() {
             <p className="read-the-docs">
                 Click on the Vite, React, and Pocketto logos to learn more
             </p>
+
+            <div className='flex justify-center gap-4'>
+                <Link href="/realtime-list">Real Time List Example</Link>
+                <Link href="/realtime/new">Real Time Example</Link>
+            </div>
+
+            <Switch>
+                <Route path="/realtime-list" component={DemoRealTimeListPage} />
+
+                <Route path="/realtime/:id" component={DemoRealTimePage} />
+
+                <Route>Click any of above link to proceed</Route>
+            </Switch>
         </>
     )
 }

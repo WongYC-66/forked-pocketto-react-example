@@ -75,3 +75,42 @@ button:focus-visible {
         background-color: #f9f9f9;
     }
 }
+
+
+.table-container {
+    position: relative;
+    width: 100%;
+}
+
+.table-container thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Ensure header stays on top */
+}
+
+.table-body {
+    height: 300px;
+    /* Adjust the height to your needs */
+    overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+    .table-body {
+        height: 600px;
+        /* Adjust the height to your needs */
+        overflow-y: auto;
+    }
+}
+
+.table-body table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Optional: Keep the column widths consistent between header and body */
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
