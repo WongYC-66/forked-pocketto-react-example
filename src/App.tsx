@@ -1,22 +1,8 @@
-import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { useRealtimeList } from './lib/hooks/useRealtimeList';
-import { Dummy } from './models/Dummy.p';
 
 function App() {
-    const [dList, setDList] = useState<Dummy[]>([]);
-    const dummyList = useRealtimeList(Dummy, { order: 'desc', value: dList });
-
-    useEffect(() => {
-        Dummy
-            .query()
-            .orderBy('createdAt', 'desc')
-            .get()
-            .then(result => setDList(result));
-    }, []);
-
     return (
         <>
             <div className='flex flex-row w-full justify-center'>
@@ -26,30 +12,14 @@ function App() {
                 <a href="https://react.dev" target="_blank">
                     <img src={reactLogo} className="logo react" alt="React logo" />
                 </a>
+                <a href="https://pocketto.dev" target="_blank">
+                    <div className="h-[48px] mt-3 ml-6 text-[48px]">P</div>
+                </a>
             </div>
-            <h1>Vite + React</h1>
-            <div>
-                <button className='my-4 bg-gray-200 text-black active:scale-95' onClick={async () => {
-                    const dummyItem = new Dummy();
-                    dummyItem.setRandomName();
-                    dummyItem.setRandomHexColor();
-                    await dummyItem.save();
-                }}>
-                    Click to add Dummy
-                </button>
-            </div>
+            <h1>Vite + React + Pocketto</h1>
             <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
+                Click on the Vite, React, and Pocketto logos to learn more
             </p>
-            <div className=''>
-                {
-                    dummyList.map((dummy, index) => {
-                        return <p key={index} className='text-bold' style={{
-                            color: dummy.color,
-                        }}>{dummy.name}</p>;
-                    })
-                }
-            </div>
         </>
     )
 }
