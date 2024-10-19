@@ -79,7 +79,6 @@ button:focus-visible {
 
 .table-container {
     position: relative;
-    max-width: 1000px;
     min-width: 100%;
 }
 
@@ -97,6 +96,11 @@ button:focus-visible {
 }
 
 @media (min-width: 1024px) {
+    .table-container {
+        position: relative;
+        width: 1024px;
+    }
+
     .table-body {
         height: 400px;
         /* Adjust the height to your needs */
