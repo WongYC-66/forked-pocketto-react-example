@@ -6,7 +6,7 @@ export function BackButton({
     onClick?: () => void;
 }) {
     return <button
-        className="flex flex-row my-4 text-vue-700 font-medium py-2 px-4 active:scale-90 rounded"
+        className="flex flex-row my-4 text-react-700 font-medium py-2 px-4 active:scale-90 rounded"
         onClick={() => onClick?.()}
     >
         <ChevronLeft className="w-5 h-5 inline-block mr-1 mt-0.5" />

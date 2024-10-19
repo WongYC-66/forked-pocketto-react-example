@@ -79,7 +79,7 @@ button:focus-visible {
 
 .table-container {
     position: relative;
-    width: 100%;
+    width: 1000px;
 }
 
 .table-container thead {
@@ -97,7 +97,7 @@ button:focus-visible {
 
 @media (min-width: 1024px) {
     .table-body {
-        height: 600px;
+        height: 400px;
         /* Adjust the height to your needs */
         overflow-y: auto;
     }
