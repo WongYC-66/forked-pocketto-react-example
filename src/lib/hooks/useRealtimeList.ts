@@ -2,32 +2,6 @@ import { BaseModel, onDocChange } from "pocketto";
 import { ModelStatic } from "pocketto/dist/src/definitions/Model";
 import { useEffect, useState } from "react";
 
-export function useRealtimeValue<T extends BaseModel>(value: T, onChange?: (value: T) => void) {
-    const [data, setData] = useState<T>(value);
-
-    const [changedDoc, setChangedDoc] = useState<T>();
-    useEffect(() => {
-        const docChange = async (id: string) => {
-            if (id !== data.id) return;
-            const doc = await data.getClass().query().find(id) as T;
-            setChangedDoc(doc);
-        }
-        const event = onDocChange(docChange);
-        return () => {
-            event.off('docChange', docChange);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (changedDoc) {
-            setData(changedDoc);
-            onChange?.(changedDoc);
-        }
-    }, [changedDoc]);
-
-    return data;
-}
-
 export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, config: {
     value?: Array<T>;
     onChange?: (value: Array<T>) => void;
@@ -39,6 +13,7 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
         value,
         onChange,
         order,
+        orderBy,
         disableAutoAppend,
     } = config;
     const [data, setData] = useState<Array<T>>(value || []);
@@ -76,6 +51,18 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                         newData.unshift(changedDoc as T);
                     } else if (order === "asc") {
                         newData.push(changedDoc as T);
+                    }
+
+                    if (orderBy) {
+                        newData.sort((a, b) => {
+                            if (a[orderBy] > b[orderBy]) {
+                                return order === "asc" ? 1 : -1;
+                            }
+                            if (a[orderBy] < b[orderBy]) {
+                                return order === "asc" ? -1 : 1;
+                            }
+                            return 0;
+                        });
                     }
                 }
                 onChange?.(newData);
