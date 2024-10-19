@@ -2,16 +2,24 @@ import { BaseModel, onDocChange } from "pocketto";
 import { ModelStatic } from "pocketto/dist/src/definitions/Model";
 import { useEffect, useState } from "react";
 
-export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: string, onChange?: (value: T) => void) {
-    const [data, setData] = useState<T>(new type());
+export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: string) {
+    const [data, setDefaultData] = useState<T>(new type());
+    const setData = (value: T) => {
+        const json = value.toJson();
+        const klass = value.getClass();
+        const newData = new klass();
+        newData.fill(json);
+        newData._meta._rev = value._meta._rev;
+        setDefaultData(newData as T);
+    };
 
     const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {
-        const docChange = async (id: string) => {
+        const docChange = async (newId: string) => {
             const modelName = new type().getClass().collectionName as string + '.';
-            id = id.replace(modelName, '');
-            if (id !== data.id) return;
-            const doc = await data.getClass().query().find(id) as T;
+            newId = newId.replace(modelName, '');
+            if (newId !== data.id) return;
+            const doc = await data.getClass().query().find(newId) as T;
             setChangedDoc(doc);
         }
         const event = onDocChange(docChange);
@@ -22,7 +30,7 @@ export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: stri
 
     useEffect(() => {
         if (id) {
-            data.getClass().find(id).then((doc) => {
+            new type().getClass().find(id).then((doc) => {
                 setData(doc as T);
             });
         }
@@ -31,9 +39,8 @@ export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: stri
     useEffect(() => {
         if (changedDoc) {
             setData(changedDoc);
-            onChange?.(changedDoc);
         }
     }, [changedDoc]);
 
-    return data;
+    return [data, setData] as [T, (value: T) => void];
 }
