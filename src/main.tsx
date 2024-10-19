@@ -5,6 +5,7 @@ import './index.css'
 import { DatabaseManager, p } from 'pocketto'
 
 p.setEnvironment('browser');
+p.setIdMethod('timestamp');
 DatabaseManager.connect('default', {
     dbName: 'default',
 }).then(async (localDb) => {
