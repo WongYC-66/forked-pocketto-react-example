@@ -53,17 +53,16 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                         newData.push(changedDoc as T);
                     }
 
-                    if (orderBy) {
-                        newData.sort((a, b) => {
-                            if (a[orderBy] > b[orderBy]) {
-                                return order === "asc" ? 1 : -1;
-                            }
-                            if (a[orderBy] < b[orderBy]) {
-                                return order === "asc" ? -1 : 1;
-                            }
-                            return 0;
-                        });
-                    }
+                    const sortBy = orderBy || 'createdAt';
+                    newData.sort((a, b) => {
+                        if (a[sortBy] > b[sortBy]) {
+                            return order === "asc" ? 1 : -1;
+                        }
+                        if (a[sortBy] < b[sortBy]) {
+                            return order === "asc" ? -1 : 1;
+                        }
+                        return 0;
+                    });
                 }
                 onChange?.(newData);
                 return newData;
