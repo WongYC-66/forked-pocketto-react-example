@@ -4,14 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 
 export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, config: {
     condition?: (query: QueryBuilder<T>) => QueryBuilder<T>;
-    onChange?: (value: Array<T>) => void;
+    onItemChange?: (value: T | undefined) => void;
+    onItemCreate?: (value: T | undefined) => void;
+    onItemUpdate?: (value: T | undefined) => void;
     order?: "asc" | "desc";
     orderBy?: keyof T;
     disableAutoAppend?: boolean;
 } = {}) {
     const {
         condition = (query) => query.orderBy('createdAt', 'desc'),
-        onChange,
+        onItemChange,
+        onItemCreate,
+        onItemUpdate,
         order,
         orderBy,
         disableAutoAppend,
@@ -52,6 +56,8 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                 const sameIdIndex = newData.findIndex((d) => d.id === changedDoc.id);
                 if (sameIdIndex !== -1) {
                     newData[sameIdIndex] = changedDoc;
+                    onItemUpdate?.(changedDoc);
+                    setTimeout(() => onItemUpdate?.(undefined), 3000);
                 } else if (!disableAutoAppend) {
                     if (!order || order === "desc") {
                         newData.unshift(changedDoc as T);
@@ -69,8 +75,12 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                         }
                         return 0;
                     });
+
+                    onItemCreate?.(changedDoc);
+                    setTimeout(() => onItemCreate?.(undefined), 3000);
                 }
-                onChange?.(newData);
+                onItemChange?.(changedDoc);
+                setTimeout(() => onItemChange?.(undefined), 3000);
                 return newData;
             });
         }

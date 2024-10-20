@@ -1,13 +1,17 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
 import { useRealtimeList } from "../hooks/useRealtimeList";
 import { useLocation } from "wouter";
 import { faker } from '@faker-js/faker';
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
+import { LinearColorChangeTr } from "../components/LinearColorChangeTr";
 
 export function DemoRealTimeListView() {
-    const salesInvoices = useRealtimeList(SalesInvoice);
+    const [changedItem, setChangedItem] = useState<SalesInvoice>();
+    const salesInvoices = useRealtimeList(SalesInvoice, {
+        onItemChange: (value) => setChangedItem(value),
+    });
     const [_, setLocation] = useLocation();
 
     const getPaidColor = useCallback((percentage: number) => {
@@ -75,7 +79,9 @@ export function DemoRealTimeListView() {
                         <tbody>
                             {
                                 salesInvoices.map((invoice) => {
-                                    return <tr
+                                    return <LinearColorChangeTr
+                                        start={changedItem?.id === invoice.id}
+                                        transitionColor="#1ce88a"
                                         key={invoice.id}
                                         className="bg-white hover:bg-gray-200 text-gray-800 border-b border-slate-300 cursor-pointer"
                                         onClick={() => setLocation(`/realtime/${invoice.id}`)}
@@ -103,7 +109,7 @@ export function DemoRealTimeListView() {
                                                 <div className="text-right">{formatNumber(invoice.paidAmount)}</div>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </LinearColorChangeTr>
                                 })
                             }
 
