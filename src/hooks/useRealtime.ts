@@ -26,7 +26,7 @@ export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: stri
         return () => {
             event.off('docChange', docChange);
         }
-    }, []);
+    }, [data]);
 
     useEffect(() => {
         if (id) {
