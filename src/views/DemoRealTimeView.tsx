@@ -9,11 +9,16 @@ import { Alert } from "../components/Alert";
 
 export function DemoRealTimeView() {
     const [match, params] = useRoute("/realtime/:id");
-    const id = params?.id === 'new' ? undefined : params?.id;
+    const [id, setId] = useState<string | undefined>(params?.id === 'new' ? undefined : params?.id);
     const [invoice, setInvoice] = useRealtime(SalesInvoice, id);
+    console.log('invoice?: ', invoice);
     const [location, setLocation] = useLocation();
     const [saved, setSaved] = useState(false);
     const [beingUpdated, setBeingUpdated] = useState(false);
+
+    useEffect(() => {
+        setId(params?.id === 'new' ? undefined : params?.id);
+    }, [params?.id]);
 
     useEffect(() => {
         if (id) {
@@ -25,7 +30,7 @@ export function DemoRealTimeView() {
 
     const [rev, setRev] = useState('');
     useEffect(() => {
-        if (invoice._meta._rev !== rev && rev && !saved) {
+        if (invoice._meta._rev !== rev && rev && invoice._meta._rev && !saved) {
             setBeingUpdated(true);
             setTimeout(() => setBeingUpdated(false), 3000);
         } else {
@@ -33,6 +38,7 @@ export function DemoRealTimeView() {
         }
     }, [invoice._meta._rev, rev, saved]);
 
+    console.log('invoice.taxRate: ', invoice.taxRate);
     return <div>
         <Alert type='success' title="Invoice saved!" show={saved} />
         <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} />
@@ -89,11 +95,11 @@ export function DemoRealTimeView() {
                     className="border rounded-md px-2 focus:outline-react-500 h-12 w-full"
                     value={invoice.subtotalAmount}
                     onChange={(event) => {
-                        const value = parseFloat(event.target.value || '0');
-                        invoice.taxAmount = value * invoice.taxRate / 100;
+                        invoice.subtotalAmount = event.target.value;
+                        const value = Number(event.target.value || '0');
+                        invoice.taxAmount = value * Number(invoice.taxRate) / 100;
                         const totalAmount = Number(value) + Number(invoice.taxAmount);
                         invoice.totalAmount = totalAmount;
-                        invoice.subtotalAmount = Number(value);
                         setInvoice(invoice);
                     }}
                 />
@@ -104,11 +110,11 @@ export function DemoRealTimeView() {
                     className="border rounded-md px-2 focus:outline-react-500 h-12 w-full"
                     value={invoice.taxRate}
                     onChange={(event) => {
-                        const value = parseFloat(event.target?.value || '0');
-                        invoice.taxAmount = invoice.subtotalAmount * value / 100;
+                        invoice.taxRate = event.target.value;
+                        const value = Number(event.target?.value || '0');
+                        invoice.taxAmount = Number(invoice.subtotalAmount) * value / 100;
                         const totalAmount = Number(invoice.subtotalAmount) + Number(invoice.taxAmount);
                         invoice.totalAmount = totalAmount;
-                        invoice.taxRate = Number(value);
                         setInvoice(invoice);
                     }}
                 />
@@ -134,8 +140,7 @@ export function DemoRealTimeView() {
                 )}
                 value={invoice.paidAmount}
                 onChange={(event) => {
-                    const value = parseFloat(event.target.value || '0');
-                    invoice.paidAmount = value;
+                    invoice.paidAmount = event.target.value;
                     setInvoice(invoice);
                 }}
             />

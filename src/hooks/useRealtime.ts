@@ -33,6 +33,8 @@ export function useRealtime<T extends BaseModel>(type: ModelStatic<T>, id?: stri
             new type().getClass().find(id).then((doc) => {
                 setData(doc as T);
             });
+        } else {
+            setData(new type());
         }
     }, [id]);
 
