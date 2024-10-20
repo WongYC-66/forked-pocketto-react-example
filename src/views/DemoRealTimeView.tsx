@@ -5,12 +5,15 @@ import { useRealtime } from "../hooks/useRealtime";
 import { BackButton } from "../components/BackButton";
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
+import { Alert } from "../components/Alert";
 
 export function DemoRealTimeView() {
     const [match, params] = useRoute("/realtime/:id");
     const id = params?.id === 'new' ? undefined : params?.id;
     const [invoice, setInvoice] = useRealtime(SalesInvoice, id);
     const [location, setLocation] = useLocation();
+    const [saved, setSaved] = useState(false);
+    const [beingUpdated, setBeingUpdated] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -22,14 +25,18 @@ export function DemoRealTimeView() {
 
     const [rev, setRev] = useState('');
     useEffect(() => {
-        if (invoice._meta._rev !== rev && rev) {
-            console.log('updated');
+        if (invoice._meta._rev !== rev && rev && !saved) {
+            setBeingUpdated(true);
+            setTimeout(() => setBeingUpdated(false), 3000);
         } else {
             setRev(invoice._meta._rev);
         }
-    }, [invoice._meta._rev]);
+    }, [invoice._meta._rev, rev, saved]);
 
     return <div>
+        <Alert type='success' title="Invoice saved!" show={saved} />
+        <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} />
+
         <div className="flex justify-between">
             <div className="text-2xl font-semibold">{id ? 'Update invoice' : 'Create new invoice'}</div>
             <div className="flex flex-row gap-4">
@@ -38,7 +45,11 @@ export function DemoRealTimeView() {
                 />
                 <button
                     className="my-4 bg-react-700 hover:bg-react-900 text-white active:scale-90 font-medium py-2 px-4 rounded"
-                    onClick={async () => setInvoice(await invoice.save())}
+                    onClick={async () => {
+                        setInvoice(await invoice.save());
+                        setSaved(true);
+                        setTimeout(() => setSaved(false), 3000);
+                    }}
                 >
                     Save
                 </button>
@@ -131,5 +142,5 @@ export function DemoRealTimeView() {
             {Number(invoice.paidAmount) > Number(invoice.totalAmount) && <div className="text-xs text-error">Paid amount should be less than total amount</div>}
             {Number(invoice.paidAmount) === Number(invoice.totalAmount) && <div className="text-xs text-success">All cleared!</div>}
         </div>
-    </div>;
+    </div >;
 }
