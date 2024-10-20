@@ -9,10 +9,10 @@ import { Alert } from "../components/Alert";
 import { CheckCircle, InfoIcon } from "lucide-react";
 
 export function DemoRealTimeView() {
-    const [match, params] = useRoute("/realtime/:id");
+    const [_, params] = useRoute("/realtime/:id");
     const [id, setId] = useState<string | undefined>(params?.id === 'new' ? undefined : params?.id);
     const [invoice, setInvoice] = useRealtime(SalesInvoice, id);
-    const [location, setLocation] = useLocation();
+    const [__, setLocation] = useLocation();
     const [saved, setSaved] = useState(false);
     const [beingUpdated, setBeingUpdated] = useState(false);
 

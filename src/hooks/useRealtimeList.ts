@@ -1,28 +1,34 @@
-import { BaseModel, onDocChange } from "pocketto";
+import { BaseModel, onDocChange, QueryBuilder } from "pocketto";
 import { ModelStatic } from "pocketto/dist/src/definitions/Model";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, config: {
-    value?: Array<T>;
+    condition?: (query: QueryBuilder<T>) => QueryBuilder<T>;
     onChange?: (value: Array<T>) => void;
     order?: "asc" | "desc";
     orderBy?: keyof T;
     disableAutoAppend?: boolean;
 } = {}) {
     const {
-        value,
+        condition = (query) => query.orderBy('createdAt', 'desc'),
         onChange,
         order,
         orderBy,
         disableAutoAppend,
     } = config;
-    const [data, setData] = useState<Array<T>>(value || []);
+    const [data, setData] = useState<Array<T>>([]);
+
+    const fetch = useCallback(async (builder: (query: QueryBuilder<T>) => QueryBuilder<T>) => {
+        const query = builder(new type().getClass().query() as unknown as QueryBuilder<T>);
+        const docs = await query.get() as Array<T>;
+        setData(docs);
+    }, []);
 
     useEffect(() => {
-        if (value) {
-            setData(value);
+        if (condition) {
+            fetch(condition);
         }
-    }, [value]);
+    }, [condition]);
 
     const [changedDoc, setChangedDoc] = useState<T>();
     useEffect(() => {

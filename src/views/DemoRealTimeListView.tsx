@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
 import { useRealtimeList } from "../hooks/useRealtimeList";
 import { useLocation } from "wouter";
@@ -7,19 +7,8 @@ import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
 
 export function DemoRealTimeListView() {
-    const [initList, setInitList] = useState<SalesInvoice[]>([]);
-    const salesInvoices = useRealtimeList(SalesInvoice, {
-        value: initList,
-        order: 'desc',
-    });
-    const [location, setLocation] = useLocation();
-
-    useEffect(() => {
-        SalesInvoice.query()
-            .orderBy('createdAt', 'desc')
-            .get()
-            .then((result) => setInitList(result));
-    }, []);
+    const salesInvoices = useRealtimeList(SalesInvoice);
+    const [_, setLocation] = useLocation();
 
     const getPaidColor = useCallback((percentage: number) => {
         if (percentage >= 50) {
