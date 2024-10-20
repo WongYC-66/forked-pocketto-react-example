@@ -1,15 +1,16 @@
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 
-
 export function Alert({
     show = false,
     type,
     title,
+    icon,
 }: {
     show?: boolean;
     type: 'success' | 'error' | 'warning' | 'info';
     title: string;
+    icon?: React.ReactNode;
 }) {
     if (!show) return <></>;
     return <motion.div
@@ -27,7 +28,7 @@ export function Alert({
         )}
     >
         <div className="flex flex-row">
-            <slot name="icon"></slot>
+            {icon}
             <div>{title}</div>
         </div>
     </motion.div>;

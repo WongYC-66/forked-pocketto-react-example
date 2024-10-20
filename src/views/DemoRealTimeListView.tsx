@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
 import { useRealtimeList } from "../hooks/useRealtimeList";
-import { useLocation, useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { faker } from '@faker-js/faker';
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";

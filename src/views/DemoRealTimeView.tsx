@@ -6,12 +6,12 @@ import { BackButton } from "../components/BackButton";
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
 import { Alert } from "../components/Alert";
+import { CheckCircle, InfoIcon } from "lucide-react";
 
 export function DemoRealTimeView() {
     const [match, params] = useRoute("/realtime/:id");
     const [id, setId] = useState<string | undefined>(params?.id === 'new' ? undefined : params?.id);
     const [invoice, setInvoice] = useRealtime(SalesInvoice, id);
-    console.log('invoice?: ', invoice);
     const [location, setLocation] = useLocation();
     const [saved, setSaved] = useState(false);
     const [beingUpdated, setBeingUpdated] = useState(false);
@@ -38,10 +38,9 @@ export function DemoRealTimeView() {
         }
     }, [invoice._meta._rev, rev, saved]);
 
-    console.log('invoice.taxRate: ', invoice.taxRate);
     return <div>
-        <Alert type='success' title="Invoice saved!" show={saved} />
-        <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} />
+        <Alert type='success' title="Invoice saved!" show={saved} icon={<CheckCircle className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
+        <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} icon={<InfoIcon className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
 
         <div className="flex justify-between">
             <div className="text-2xl font-semibold">{id ? 'Update invoice' : 'Create new invoice'}</div>
@@ -97,7 +96,7 @@ export function DemoRealTimeView() {
                     onChange={(event) => {
                         invoice.subtotalAmount = event.target.value;
                         const value = Number(event.target.value || '0');
-                        invoice.taxAmount = value * Number(invoice.taxRate) / 100;
+                        invoice.taxAmount = Number(value) * Number(invoice.taxRate) / 100;
                         const totalAmount = Number(value) + Number(invoice.taxAmount);
                         invoice.totalAmount = totalAmount;
                         setInvoice(invoice);
