@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
 import { useLocation, useRoute } from "wouter";
 import { useRealtime } from "../hooks/useRealtime";
@@ -38,6 +38,17 @@ export function DemoRealTimeView() {
         }
     }, [invoice._meta._rev, rev, saved]);
 
+    const save = useCallback(async () => {
+        invoice.subtotalAmount = Number(invoice.subtotalAmount);
+        invoice.taxRate = Number(invoice.taxRate);
+        invoice.taxAmount = Number(invoice.taxAmount);
+        invoice.totalAmount = Number(invoice.totalAmount);
+        invoice.paidAmount = Number(invoice.paidAmount);
+        setInvoice(await invoice.save());
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+    }, [invoice]);
+
     return <div>
         <Alert type='success' title="Invoice saved!" show={saved} icon={<CheckCircle className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
         <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} icon={<InfoIcon className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
@@ -50,11 +61,7 @@ export function DemoRealTimeView() {
                 />
                 <button
                     className="my-4 bg-react-700 hover:bg-react-900 text-white active:scale-90 font-medium py-2 px-4 rounded"
-                    onClick={async () => {
-                        setInvoice(await invoice.save());
-                        setSaved(true);
-                        setTimeout(() => setSaved(false), 3000);
-                    }}
+                    onClick={save}
                 >
                     Save
                 </button>
