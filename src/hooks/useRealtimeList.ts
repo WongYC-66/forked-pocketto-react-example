@@ -7,6 +7,7 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
     onItemChange?: (value: T | undefined) => void;
     onItemCreate?: (value: T | undefined) => void;
     onItemUpdate?: (value: T | undefined) => void;
+    animationDelay?: number;
     order?: "asc" | "desc";
     orderBy?: keyof T;
     disableAutoAppend?: boolean;
@@ -16,6 +17,7 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
         onItemChange,
         onItemCreate,
         onItemUpdate,
+        animationDelay,
         order,
         orderBy,
         disableAutoAppend,
@@ -57,7 +59,7 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                 if (sameIdIndex !== -1) {
                     newData[sameIdIndex] = changedDoc;
                     onItemUpdate?.(changedDoc);
-                    setTimeout(() => onItemUpdate?.(undefined), 3000);
+                    setTimeout(() => onItemUpdate?.(undefined), animationDelay || 1);
                 } else if (!disableAutoAppend) {
                     if (!order || order === "desc") {
                         newData.unshift(changedDoc as T);
@@ -77,10 +79,10 @@ export function useRealtimeList<T extends BaseModel>(type: ModelStatic<T>, confi
                     });
 
                     onItemCreate?.(changedDoc);
-                    setTimeout(() => onItemCreate?.(undefined), 3000);
+                    setTimeout(() => onItemCreate?.(undefined), animationDelay || 1);
                 }
                 onItemChange?.(changedDoc);
-                setTimeout(() => onItemChange?.(undefined), 3000);
+                setTimeout(() => onItemChange?.(undefined), animationDelay || 1);
                 return newData;
             });
         }

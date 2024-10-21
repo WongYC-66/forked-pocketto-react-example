@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
 
-export const LinearColorChangeTr = ({
+export const HighlightableTr = ({
     start,
-    transitionColor = '#00ff00',
+    color = '#00ff00',
     children,
     className,
     onClick,
 }: {
     start: boolean;
-    transitionColor?: string;
+    color?: string;
     children?: React.ReactNode;
     className?: string;
     onClick?: () => void;
@@ -36,8 +36,8 @@ export const LinearColorChangeTr = ({
                     ? {
                         backgroundColor: [
                             initialColor,
-                            transitionColor,
-                            transitionColor,
+                            color,
+                            color,
                             initialColor
                         ],
                     }

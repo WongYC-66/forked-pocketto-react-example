@@ -5,12 +5,13 @@ import { useLocation } from "wouter";
 import { faker } from '@faker-js/faker';
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
-import { LinearColorChangeTr } from "../components/LinearColorChangeTr";
+import { HighlightableTr } from "../components/HighlightableTr";
 
 export function DemoRealTimeListView() {
     const [changedItem, setChangedItem] = useState<SalesInvoice>();
     const salesInvoices = useRealtimeList(SalesInvoice, {
-        onItemChange: (value) => setChangedItem(value),
+        animationDelay: 2000,
+        onItemChange: value => setChangedItem(value),
     });
     const [_, setLocation] = useLocation();
 
@@ -79,9 +80,9 @@ export function DemoRealTimeListView() {
                         <tbody>
                             {
                                 salesInvoices.map((invoice) => {
-                                    return <LinearColorChangeTr
+                                    return <HighlightableTr
                                         start={changedItem?.id === invoice.id}
-                                        transitionColor="#1ce88a"
+                                        color={invoice.color}
                                         key={invoice.id}
                                         className="bg-white hover:bg-gray-200 text-gray-800 border-b border-slate-300 cursor-pointer"
                                         onClick={() => setLocation(`/realtime/${invoice.id}`)}
@@ -109,7 +110,7 @@ export function DemoRealTimeListView() {
                                                 <div className="text-right">{formatNumber(invoice.paidAmount)}</div>
                                             </div>
                                         </td>
-                                    </LinearColorChangeTr>
+                                    </HighlightableTr>
                                 })
                             }
 
