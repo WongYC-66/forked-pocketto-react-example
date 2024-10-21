@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
-import { useRealtimeList } from "../hooks/useRealtimeList";
 import { useLocation } from "wouter";
 import { faker } from '@faker-js/faker';
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
 import { HighlightableTr } from "../components/HighlightableTr";
+import { useRealtimeList } from "pocketto-react";
 
 export function DemoRealTimeListView() {
     const [changedItem, setChangedItem] = useState<SalesInvoice>();
@@ -82,7 +82,7 @@ export function DemoRealTimeListView() {
                                 salesInvoices.map((invoice) => {
                                     return <HighlightableTr
                                         start={changedItem?.id === invoice.id}
-                                        color={invoice.color}
+                                        color={'#B3ECFF'}
                                         key={invoice.id}
                                         className="bg-white hover:bg-gray-200 text-gray-800 border-b border-slate-300 cursor-pointer"
                                         onClick={() => setLocation(`/realtime/${invoice.id}`)}

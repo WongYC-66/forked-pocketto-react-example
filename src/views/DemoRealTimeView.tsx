@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { SalesInvoice } from "../models/SalesInvoice.p";
 import { useLocation, useRoute } from "wouter";
-import { useRealtime } from "../hooks/useRealtime";
 import { BackButton } from "../components/BackButton";
 import { cn } from "../utils/cn";
 import { formatNumber } from "../utils/number";
 import { Alert } from "../components/Alert";
 import { CheckCircle, InfoIcon } from "lucide-react";
+import { useRealtime } from "pocketto-react";
 
 export function DemoRealTimeView() {
     const [_, params] = useRoute("/realtime/:id");
