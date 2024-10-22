@@ -20,14 +20,6 @@ export function DemoRealTimeView() {
         setId(params?.id === 'new' ? undefined : params?.id);
     }, [params?.id]);
 
-    useEffect(() => {
-        if (id) {
-            SalesInvoice.find(id).then((doc) => {
-                setInvoice(doc as SalesInvoice);
-            });
-        }
-    }, [id]);
-
     const [rev, setRev] = useState('');
     useEffect(() => {
         if (invoice._meta._rev !== rev && rev && invoice._meta._rev && !saved) {
