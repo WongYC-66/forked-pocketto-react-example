@@ -84,7 +84,7 @@ export function DemoRealTimeListView() {
                                         start={changedItem?.id === invoice.id}
                                         color={'#B3ECFF'}
                                         key={invoice.id}
-                                        className="bg-white hover:bg-gray-200 text-gray-800 border-b border-slate-300 cursor-pointer"
+                                        className="hover:bg-gray-200 text-gray-800 dark:text-white border-b border-slate-300 cursor-pointer"
                                         onClick={() => setLocation(`/realtime/${invoice.id}`)}
                                     >
                                         <td width="5%" className="pt-4 px-4 py-2">
