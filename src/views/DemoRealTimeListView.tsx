@@ -65,12 +65,12 @@ export function DemoRealTimeListView() {
                 <table width="100%">
                     <thead>
                         <tr>
-                            <th width="5%" className="rounded-tl-md bg-react-700 text-white font-medium px-4 py-2"></th>
-                            <th width="30%" className="bg-react-700 text-white font-medium px-4 py-2">Customer Name</th>
-                            <th width="15%" className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Subtotal</div></th>
-                            <th width="10%" className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Tax</div></th>
-                            <th width="15%" className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Total</div></th>
-                            <th width="20%" className="rounded-tr-md bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Paid Amount</div></th>
+                            <th style={{ width: '5%' }} className="rounded-tl-md bg-react-700 text-white font-medium px-4 py-2"></th>
+                            <th style={{ width: '30%' }} className="bg-react-700 text-white font-medium px-4 py-2">Customer Name</th>
+                            <th style={{ width: '15%' }} className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Subtotal</div></th>
+                            <th style={{ width: '10%' }} className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Tax</div></th>
+                            <th style={{ width: '15%' }} className="bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Total</div></th>
+                            <th style={{ width: '20%' }} className="rounded-tr-md bg-react-700 text-white font-medium px-4 py-2"><div className="text-right">Paid Amount</div></th>
                         </tr>
                     </thead>
                 </table>
