@@ -19,7 +19,7 @@ export const HighlightableTr = ({
 
     useEffect(() => {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setInitialColor(prefersDarkMode ? '#000000' : '#ffffff');
+        setInitialColor(prefersDarkMode ? '#242424' : '#ffffff');
     }, []);
 
     return (
