@@ -35,7 +35,11 @@ function App() {
 
                 <Route path="/realtime/:id" component={DemoRealTimeView} />
 
-                <Route>Click any of above link to proceed</Route>
+                <Route>
+                    <div className='text-center'>
+                        Click any of above link to proceed
+                    </div>
+                </Route>
             </Switch>
         </>
     )
