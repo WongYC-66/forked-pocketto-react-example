@@ -22,13 +22,13 @@ export function DemoRealTimeView() {
 
     const [rev, setRev] = useState('');
     useEffect(() => {
-        if (invoice._meta._rev !== rev && rev && invoice._meta._rev && !saved) {
+        if (invoice.rev !== rev && rev && invoice.rev && !saved) {
             setBeingUpdated(true);
             setTimeout(() => setBeingUpdated(false), 3000);
         } else {
-            setRev(invoice._meta._rev);
+            setRev(invoice.rev);
         }
-    }, [invoice._meta._rev, rev, saved]);
+    }, [invoice.rev, rev, saved]);
 
     const save = useCallback(async () => {
         invoice.subtotalAmount = Number(invoice.subtotalAmount);
