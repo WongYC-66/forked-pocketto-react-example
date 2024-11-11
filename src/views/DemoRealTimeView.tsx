@@ -41,6 +41,11 @@ export function DemoRealTimeView() {
         setTimeout(() => setSaved(false), 3000);
     }, [invoice]);
 
+    const del = useCallback(async () => {
+        await invoice.delete(true);
+        setLocation('/realtime-list', { replace: true });
+    }, [invoice, setLocation]);
+
     return <div>
         <Alert type='success' title="Invoice saved!" show={saved} icon={<CheckCircle className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
         <Alert type='info' title="Invoice was updated by other user!" show={beingUpdated} icon={<InfoIcon className="w-5 h-5 inline-block mr-2 mt-0.5" />} />
@@ -56,6 +61,13 @@ export function DemoRealTimeView() {
                     onClick={save}
                 >
                     Save
+                </button>
+                <button
+                    disabled={!id}
+                    className="my-4 bg-error text-white active:scale-90 disabled:active:scale-100 disabled:opacity-50 font-medium py-2 px-4 rounded"
+                    onClick={del}
+                >
+                    Delete
                 </button>
             </div>
         </div>
